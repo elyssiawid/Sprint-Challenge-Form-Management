@@ -1,7 +1,8 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, waitForElement } from "@testing-library/react";
 import "@testing-library/react/cleanup-after-each";
 import App from "./App.js";
+import FormikUserForm from "./components/UserForm";
 
 describe("<App />", () => {
   // Test one event
@@ -9,10 +10,12 @@ describe("<App />", () => {
     render(<App />);
   });
   it("submit event works", () => {
-    const submitButton = getByText("submit");
+    const { getByText } = render(<FormikUserForm />);
+    const submitButton = getByText(/submit/i);
     fireEvent.click(submitButton);
   });
-  it("data appears on page", () => {
-    const dataItem = getByText("Hush Puppies");
+  it("data appears on page", async () => {
+    const { getByText } = render(<FormikUserForm />);
+    await waitForElement(() => getByText(/Hush Puppies/i));
   });
 });
